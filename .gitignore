@@ -1,0 +1,21 @@
+# Node dependencies & build artifacts
+node_modules/
+.expo/
+dist/
+build/
+.next/
+
+# Environment variables & secrets (Never commit secrets!)
+.env
+.env.local
+.env.production
+
+# Local runtime store & logs
+backend/data/*.json
+backend/data/*.tmp
+*.log
+
+# OS / Editor files
+.DS_Store
+.vscode/
+.idea/

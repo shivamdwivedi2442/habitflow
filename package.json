@@ -1,0 +1,23 @@
+{
+  "name": "habitflow-supabase-react-native",
+  "version": "3.0.0",
+  "description": "Full-Stack + Supabase + React / React Native (Expo) Habit Tracker with AI Voice, Nodemailer OTP, Phone Gemini Webhook & Google Calendar Sync",
+  "author": "Shivam Coder <https://github.com/shivamdwivedi2442>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node backend/src/server.js",
+    "seed": "node backend/src/seed.js",
+    "test": "node --test backend/tests/habitflow.test.js",
+    "mobile": "cd mobile-expo && npm start"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.7",
+    "express": "^4.18.3",
+    "nodemailer": "^6.9.11",
+    "pg": "^8.11.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

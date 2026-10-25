@@ -1,0 +1,17 @@
+{
+  "name": "habitflow-backend",
+  "version": "3.0.0",
+  "author": "Shivam Coder <https://github.com/shivamdwivedi2442>",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node src/seed.js",
+    "test": "node --test tests/habitflow.test.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.7",
+    "express": "^4.18.3",
+    "nodemailer": "^6.9.11",
+    "pg": "^8.11.3"
+  }
+}
