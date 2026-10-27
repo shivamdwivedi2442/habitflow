@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "HabitFlow — Shivam Coder",
+    "slug": "habitflow-shivam",
+    "version": "4.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#050811"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shivamcoder.habitflow"
+    },
+    "android": {
+      "package": "com.shivamcoder.habitflow",
+      "versionCode": 4,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#050811"
+      },
+      "permissions": [
+        "INTERNET",
+        "RECORD_AUDIO",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "SCHEDULE_EXACT_ALARM",
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "author": "Shivam Coder",
+      "github": "https://github.com/shivamdwivedi2442",
+      "eas": {
+        "projectId": "819e2fb0-63df-4f28-85fb-4a50a2cef21a"
+      }
+    }
+  }
+}
