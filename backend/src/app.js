@@ -39,7 +39,7 @@ const {
   calculateCompletionRate30d,
   generate6MonthHeatmap
 } = require("./services/streakEngine");
-const { classifyAiCommand, format12HourAmPm } = require("./services/aiAssistant");
+const { classifyAiCommand, classifyWithGeminiPro, format12HourAmPm } = require("./services/aiAssistant");
 const { sendOtpEmail } = require("./services/mailer");
 const {
   buildGoogleCalendarTemplateUrl,
@@ -192,10 +192,10 @@ async function authenticateRequest(headers, queryToken = null) {
   return user;
 }
 
-async function executeNaturalLanguageCommand(currentUser, transcript, tzName, nowUtc = null) {
+async function executeNaturalLanguageCommand(currentUser, transcript, tzName, nowUtc = null, customGeminiKey = null) {
   const existingHabits = await db.listHabitsByUser(currentUser.id, true);
   const todayStr = getUserToday(tzName, nowUtc);
-  const decision = classifyAiCommand(transcript, existingHabits, todayStr);
+  const decision = await classifyWithGeminiPro(transcript, existingHabits, todayStr, customGeminiKey);
 
   if (decision.intent === "delete_habit") {
     if (!decision.matchedHabit) {
@@ -232,7 +232,67 @@ async function executeNaturalLanguageCommand(currentUser, transcript, tzName, no
         action: "deleted",
         deleted_habit_id: target.id,
         deleted_habit_name: target.name,
+        calendar_sync_action: "cancel_alarm",
         reply
+      }
+    };
+  }
+
+  // 1b. Intent: EDIT / UPDATE HABIT ("brush ka time sham 8 baje kr do", "rename Morning Brush to Night Brush")
+  if (decision.intent === "edit_habit") {
+    if (!decision.matchedHabit) {
+      return {
+        status: 404,
+        body: {
+          intent: "edit_habit",
+          error: `Could not find any task matching '${decision.keyword}' to edit.`
+        }
+      };
+    }
+    const target = decision.matchedHabit;
+    const existingDays = Array.isArray(target.schedule_days)
+      ? target.schedule_days
+      : JSON.parse(target.schedule_days || "[]");
+
+    const mergedPayload = validateHabitInput({
+      name: decision.updates.name || target.name,
+      description: target.description || "",
+      color: target.color || "#6366f1",
+      icon: target.icon || "bolt",
+      schedule_type: decision.updates.schedule_type || target.schedule_type,
+      schedule_days: decision.updates.schedule_days || existingDays,
+      target_per_week: decision.updates.target_per_week || target.target_per_week,
+      reminder_enabled:
+        decision.updates.reminder_enabled !== undefined
+          ? decision.updates.reminder_enabled
+          : Boolean(target.reminder_enabled),
+      reminder_time:
+        decision.updates.reminder_time !== undefined
+          ? decision.updates.reminder_time
+          : target.reminder_time
+    });
+
+    const updated = await db.updateHabit(target.id, currentUser.id, mergedPayload);
+    const checkins = await db.listCheckinsByHabit(target.id);
+    const serialized = serializeHabit(updated, checkins, tzName, nowUtc);
+    const timeNote = serialized.reminder_time_12h ? ` (Alarm: ${serialized.reminder_time_12h})` : "";
+    const reply = `Updated task '${serialized.name}'${timeNote} and synced calendar alarm!`;
+    await db.logAiCommand({
+      user_id: currentUser.id,
+      transcript,
+      intent: "edit_habit",
+      habit_id: target.id,
+      reply
+    });
+    return {
+      status: 200,
+      body: {
+        intent: "edit_habit",
+        action: "updated",
+        ai_engine: decision.ai_engine,
+        calendar_sync_action: "reschedule_alarm",
+        reply,
+        habit: serialized
       }
     };
   }
@@ -597,12 +657,12 @@ async function dispatchApiRequest({
 
   if (method === "POST" && pathname === "/api/ai/command") {
     const { transcript } = validateAiCommandInput(body);
-    return executeNaturalLanguageCommand(currentUser, transcript, tzName, nowUtc);
+    return executeNaturalLanguageCommand(currentUser, transcript, tzName, nowUtc, body.gemini_api_key || headers["x-gemini-api-key"] || null);
   }
 
   if (method === "POST" && pathname === "/api/gemini/webhook") {
     const { transcript } = validateAiCommandInput(body);
-    const res = await executeNaturalLanguageCommand(currentUser, transcript, tzName, nowUtc);
+    const res = await executeNaturalLanguageCommand(currentUser, transcript, tzName, nowUtc, body.gemini_api_key || headers["x-gemini-api-key"] || null);
     return {
       status: res.status,
       body: {

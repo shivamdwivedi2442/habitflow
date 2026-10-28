@@ -679,3 +679,45 @@ test("17. Senior Security Penetration Audit (Prototype Pollution, IDOR Isolation
   }
   assert.equal(hit429, true, "Rate limiter must block brute-force login attempts with 429");
 });
+
+test("18. Gemini Pro AI Task Editing ('brush ka time sham 8 baje kr do' & 'brush ka naam Night Brush kr do')", async () => {
+  const headers = await registerAndGetHeaders("ai.edit@habitflow.dev", "Asia/Kolkata");
+  headers["x-debug-now-utc"] = "2026-10-28T10:00:00Z";
+
+  // 1. Create Morning Brush at 07:00 AM
+  const createRes = await dispatchApiRequest({
+    method: "POST",
+    pathname: "/api/ai/command",
+    query: {},
+    headers,
+    body: { transcript: "roj subah 7 baje brush krna h ye add kr do task" }
+  });
+  assert.equal(createRes.status, 201);
+  assert.equal(createRes.body.habit.reminder_time, "07:00");
+  assert.equal(createRes.body.habit.reminder_time_12h, "07:00 AM");
+
+  // 2. Edit the reminder time via AI: "brush ka time sham 8 baje kr do" -> 20:00 (08:00 PM)
+  const editTimeRes = await dispatchApiRequest({
+    method: "POST",
+    pathname: "/api/ai/command",
+    query: {},
+    headers,
+    body: { transcript: "brush ka time sham 8 baje kr do" }
+  });
+  assert.equal(editTimeRes.status, 200);
+  assert.equal(editTimeRes.body.intent, "edit_habit");
+  assert.equal(editTimeRes.body.habit.reminder_time, "20:00");
+  assert.equal(editTimeRes.body.habit.reminder_time_12h, "08:00 PM");
+
+  // 3. Rename the task via AI: "brush ka naam Night Brush kr do"
+  const editNameRes = await dispatchApiRequest({
+    method: "POST",
+    pathname: "/api/ai/command",
+    query: {},
+    headers,
+    body: { transcript: "brush ka naam Night Brush kr do" }
+  });
+  assert.equal(editNameRes.status, 200);
+  assert.equal(editNameRes.body.intent, "edit_habit");
+  assert.equal(editNameRes.body.habit.name, "Night Brush");
+});

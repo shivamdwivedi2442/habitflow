@@ -682,6 +682,9 @@
           <button type="button" class="ai-chip" data-ai-sample="kal ka brush ho gya">
             📅 Specific Day Done: "kal ka brush ho gya"
           </button>
+          <button type="button" class="ai-chip" data-ai-sample="brush ka time sham 8 baje kr do">
+            ✏️ Edit: "brush ka time sham 8 baje kr do"
+          </button>
           <button type="button" class="ai-chip" data-ai-sample="brush wala task hata do">
             🗑️ Remove: "brush wala task hata do"
           </button>
