@@ -1,6 +1,6 @@
 {
   "name": "habitflow-mobile-expo-universal",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "author": "Shivam Coder <https://github.com/shivamdwivedi2442>",
   "main": "index.js",
   "private": true,
@@ -12,15 +12,16 @@
     "build:apk:cloud": "npx eas-cli build -p android --profile apk"
   },
   "dependencies": {
-    "expo": "~52.0.0",
-    "expo-asset": "~11.0.1",
-    "expo-constants": "~17.0.3",
-    "expo-file-system": "~18.0.4",
-    "expo-font": "~13.0.1",
-    "expo-splash-screen": "~0.29.18",
-    "expo-status-bar": "~2.0.0",
+    "expo": "~52.0.46",
+    "expo-asset": "~11.0.5",
+    "expo-build-properties": "~0.13.3",
+    "expo-constants": "~17.0.8",
+    "expo-file-system": "~18.0.12",
+    "expo-font": "~13.0.4",
+    "expo-splash-screen": "~0.29.24",
+    "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
-    "react-native": "0.76.6"
+    "react-native": "0.76.9"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2"
