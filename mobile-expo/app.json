@@ -59,7 +59,10 @@
     },
     "extra": {
       "author": "Shivam Coder",
-      "github": "https://github.com/shivamdwivedi2442"
+      "github": "https://github.com/shivamdwivedi2442",
+      "eas": {
+        "projectId": "0e8bb4e5-fee2-4aa0-a41b-ffcbce761199"
+      }
     }
   }
 }

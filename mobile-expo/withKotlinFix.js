@@ -1,4 +1,4 @@
-Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
+// Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
 const { withGradleProperties, withProjectBuildGradle } = require("expo/config-plugins");
 
 module.exports = function withKotlinFix(config) {
