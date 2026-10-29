@@ -1,8 +1,4 @@
-/**
- * Cryptographic Authorship & Ownership Verification Engine
- * Locks Backend Runtime, JWT Key Derivation, and API Security Headers
- * to Shivam Coder (https://github.com/shivamdwivedi2442).
- */
+// Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
 const crypto = require("crypto");
 
 // Byte-array encoded identity segments (resistant to global text find-and-replace)

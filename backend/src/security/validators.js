@@ -1,7 +1,4 @@
-/**
- * Strict Server-Side Input Validators v2.0 for HabitFlow Node.js / Express Backend
- * Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
- */
+// Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
 const { validateTimezone } = require("../services/streakEngine");
 const { sanitizeValue } = require("./securityMiddleware");
 

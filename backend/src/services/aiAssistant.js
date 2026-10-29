@@ -1,17 +1,4 @@
-/**
- * Bilingual (Hindi / Hinglish / English) AI + Google Gemini Pro Engine v6.0
- * Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
- *
- * Supports:
- * 1. Real Google Gemini Pro API Integration (`GEMINI_API_KEY` in `.env` or per-request user Gemini key)
- *    using `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent`
- *    (with automatic fallback to `gemini-1.5-flash` and instant deterministic NLP so it works 100% offline/without key too!)
- * 2. 4 Full Intents:
- *    - `create_habit`: Add new task with smart AM/PM reminder & schedule ("roj subah 7 baje brush krna h ye add kr do task")
- *    - `complete_habit`: Mark task done for Today OR Specific Past Day ("brush ho gya", "kal ka brush ho gya", "monday ka gym done")
- *    - `edit_habit`: Modify/rename/reschedule an existing task ("brush ka time sham 8 baje kr do", "change gym to 5 times a week", "brush ka naam Night Brush kr do")
- *    - `delete_habit`: Remove task & cancel its calendar/alarm ("brush wala task hata do", "delete gym task")
- */
+// Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
 const { addDays, getIsoWeekday } = require("./streakEngine");
 
 const ICON_KEYWORDS = [
