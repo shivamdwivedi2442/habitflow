@@ -1,16 +1,4 @@
-/**
- * HabitFlow 3D v6.0 — Lightweight Full-Parity Universal React Native App (`mobile-expo/App.js`)
- * Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
- *
- * Includes ALL 9 Requested Features with Zero Heavy Native Dependencies:
- * 1. Persistent Single-Login Session (Persists JWT token + user profile + Gemini API key on device filesystem via expo-file-system / localStorage fallback so re-opening the app NEVER asks to login again!)
- * 2. Live 2-Stage Task Notification & Alarm Engine (-5 Mins Before & Exact On-Time with Vibration + Alert Banner + Google Calendar Sync)
- * 3. Automatic Phone Calendar & Alarm Sync on Login, Task Create, Task Done (marks ✅ DONE), Task Edit, and Task Delete (removes alarm)
- * 4. Full Gemini Pro AI Assistant Integration (Add Task, Mark Done Today or Specific Past Day, Edit/Reschedule Task, Delete Task) + Voice Input Modal & 1-Click Voice Chips
- * 5. Manual 8-Day Check-In Strip (Today + Past 7 Days) + 6-Month Calendar Heatmap per habit
- * 6. Full Create / Edit Task Modal (Daily, Specific Weekdays Mon-Sun, Flexible Times/Week, AM/PM Reminder Time, Colors, Archive/Restore)
- * 7. Complete Profile Customization (Avatar Preset Picker, Custom Image URL/Base64, Display Name, Bio, Timezone Selector, Gemini Pro API Key, and Sign Out button)
- */
+// Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
 import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
@@ -28,7 +16,6 @@ import {
   Image
 } from "react-native";
 
-// Cryptographically Locked Author Identity
 const _C1 = [83, 104, 105, 118, 97, 109, 32, 67, 111, 100, 101, 114];
 const _C2 = [115, 104, 105, 118, 97, 109, 100, 119, 105, 118, 101, 100, 105, 50, 52, 52, 50];
 const _decode = (arr) => arr.map((b) => String.fromCharCode(b)).join("");
@@ -56,11 +43,6 @@ const AVATAR_PRESETS = [
   { key: "avatar_crimson_pulse", label: "Crimson Pulse", color: "#ec4899" }
 ];
 
-// ---------------------------------------------------------------------------
-// Zero-Native-Conflict Persistent Device Storage (Works on Android APK, iOS & Web)
-// Automatically uses Expo's built-in FileSystem or Web localStorage so the user
-// stays logged in permanently across app restarts!
-// ---------------------------------------------------------------------------
 const SESSION_FILENAME = "habitflow_v6_session.json";
 
 async function savePersistentSession(sessionObj) {
@@ -143,22 +125,19 @@ export default function App() {
   const [geminiApiKey, setGeminiApiKey] = useState("");
   const [habits, setHabits] = useState([]);
   const [stats, setStats] = useState(null);
-  const [activeTab, setActiveTab] = useState("home"); // 'home' | 'tasks' | 'stats' | 'profile'
+  const [activeTab, setActiveTab] = useState("home");
 
-  // Auth State (Sign In, Sign Up, 6-Digit OTP Verification)
-  const [authMode, setAuthMode] = useState("login"); // 'login' | 'signup' | 'otp'
-  const [otpStep, setOtpStep] = useState("request"); // 'request' | 'verify'
+  const [authMode, setAuthMode] = useState("login");
+  const [otpStep, setOtpStep] = useState("request");
   const [demoOtpPreview, setDemoOtpPreview] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("shivam@habitflow.dev");
   const [password, setPassword] = useState("Shivam@2442");
 
-  // AI & Voice Assistant State
   const [aiCommand, setAiCommand] = useState("");
   const [voiceModalOpen, setVoiceModalOpen] = useState(false);
 
-  // Create / Edit Task Modal State
   const [taskModalOpen, setTaskModalOpen] = useState(false);
   const [editingHabitId, setEditingHabitId] = useState(null);
   const [taskName, setTaskName] = useState("");
@@ -170,12 +149,10 @@ export default function App() {
   const [taskRemEnabled, setTaskRemEnabled] = useState(true);
   const [taskRemTime, setTaskRemTime] = useState("07:30");
 
-  // Profile Customization State
   const [profileName, setProfileName] = useState("");
   const [profileBio, setProfileBio] = useState("");
   const [profileAvatar, setProfileAvatar] = useState("avatar_cyber_indigo");
 
-  // Notifications & Active Alarms State
   const [bannerMsg, setBannerMsg] = useState(null);
   const [cancelledAlarmIds, setCancelledAlarmIds] = useState({});
   const firedAlarmKeys = useRef(new Set());
@@ -188,9 +165,6 @@ export default function App() {
     ]).start();
   };
 
-  // -------------------------------------------------------------------------
-  // 1. Restore Saved Session on App Launch (Never Asks to Relogin!)
-  // -------------------------------------------------------------------------
   useEffect(() => {
     (async () => {
       const saved = await loadPersistentSession();
@@ -256,10 +230,6 @@ export default function App() {
     }
   }, [token, timezone]);
 
-  // -------------------------------------------------------------------------
-  // 2. Live 2-Stage Phone Alarm & Notification Daemon (-5 Min & On-Time)
-  // Respects deleted/cancelled tasks immediately!
-  // -------------------------------------------------------------------------
   useEffect(() => {
     if (!token || habits.length === 0) return;
 
@@ -319,9 +289,6 @@ export default function App() {
     return () => clearInterval(timer);
   }, [token, habits, timezone, cancelledAlarmIds]);
 
-  // -------------------------------------------------------------------------
-  // 3. Auth Handlers (Saves Session Permanently + Auto-Syncs Calendar)
-  // -------------------------------------------------------------------------
   async function completeLoginSession(data, customMsg = null) {
     setToken(data.token);
     setUser(data.user);
@@ -411,9 +378,6 @@ export default function App() {
     setBannerMsg("Signed out cleanly.");
   }
 
-  // -------------------------------------------------------------------------
-  // 4. Google Calendar & Phone Alarm Sync Helpers
-  // -------------------------------------------------------------------------
   function syncHabitToPhoneCalendar(habit, isDone = false) {
     if (!habit) return;
     if (isDone) {
@@ -435,9 +399,6 @@ export default function App() {
     Linking.openURL(icsUrl).catch(() => {});
   }
 
-  // -------------------------------------------------------------------------
-  // 5. Task Check-In, Create/Edit Modal, Archive/Restore, Delete & Gemini AI
-  // -------------------------------------------------------------------------
   async function toggleCheckin(habitId, dateStr, syncGCalOnDone = false) {
     try {
       triggerSpringBounce();
@@ -620,7 +581,6 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Cryptographic Ownership Top Bar */}
       <View style={styles.ownershipBar}>
         <Text style={styles.verifiedBadge}>● SHA-256 VERIFIED</Text>
         <Text style={styles.ownershipText}>
@@ -799,7 +759,6 @@ export default function App() {
               </View>
             </View>
 
-            {/* Gemini Pro AI Voice & Text Assistant Bar (Add, Specific-Day Done, Edit, Delete) */}
             <View style={styles.aiCard}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
                 <Text style={styles.aiTitle}>
@@ -851,7 +810,6 @@ export default function App() {
               </ScrollView>
             </View>
 
-            {/* TAB 1: HOME (KPIs + Full Habit Cards with 8-Day Manual Check-in + 6-Month Heatmap) */}
             {activeTab === "home" && (
               <View>
                 <View style={styles.kpiRow}>
@@ -928,7 +886,6 @@ export default function App() {
                       ))}
                     </View>
 
-                    {/* Compact 6-Month Heatmap Preview (Last 12 Weeks Grid) */}
                     <Text style={styles.stripTitle}>
                       6-Month Heatmap ({h.heatmap?.total_completed_6m || 0} completions):
                     </Text>
@@ -944,7 +901,6 @@ export default function App() {
                       ))}
                     </View>
 
-                    {/* Action Buttons: Mark Done + Sync Calendar Alarm + Edit + Archive + Delete */}
                     <View style={styles.cardActions}>
                       <TouchableOpacity
                         style={[
@@ -995,7 +951,6 @@ export default function App() {
               </View>
             )}
 
-            {/* TAB 2: TASKS (Daily Task Checklist + Manual Done + Calendar Sync + Archived Tasks) */}
             {activeTab === "tasks" && (
               <View>
                 <View style={styles.habitHeader}>
@@ -1084,7 +1039,6 @@ export default function App() {
               </View>
             )}
 
-            {/* TAB 3: STATS (30-Day Completion Rate Analytics) */}
             {activeTab === "stats" && (
               <View>
                 <Text style={styles.sectionHeading}>
@@ -1116,7 +1070,6 @@ export default function App() {
               </View>
             )}
 
-            {/* TAB 4: PROFILE CUSTOMIZATION + GEMINI PRO INTEGRATION + SIGN OUT */}
             {activeTab === "profile" && (
               <View style={styles.authCard}>
                 <Text style={styles.sectionHeading}>👤 Profile Customization & Gemini Pro</Text>
@@ -1209,7 +1162,6 @@ export default function App() {
         )}
       </ScrollView>
 
-      {/* Create / Edit Task Modal */}
       <Modal visible={taskModalOpen} transparent animationType="slide">
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
@@ -1320,7 +1272,6 @@ export default function App() {
         </View>
       </Modal>
 
-      {/* Voice / Mic & Phone Gemini Assistant Modal */}
       <Modal visible={voiceModalOpen} transparent animationType="fade">
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
@@ -1354,7 +1305,6 @@ export default function App() {
         </View>
       </Modal>
 
-      {/* Fixed 4-Button Bottom Navigation Bar */}
       {token ? (
         <View style={styles.bottomNav}>
           {["home", "tasks", "stats", "profile"].map((tab) => (

@@ -1,10 +1,4 @@
-/**
- * Custom Expo Config Plugin (`withKotlinFix.js`)
- * Fixes the Expo SDK 52 Compose Compiler 1.5.15 vs Kotlin 1.9.24 mismatch:
- * 1. Sets `android.kotlinVersion=1.9.25` in `android/gradle.properties`
- * 2. Adds `suppressKotlinVersionCompatibilityCheck=1.9.24` & `1.9.25` across all Android subprojects
- *    in `android/build.gradle` so `:expo-modules-core:compileReleaseKotlin` ALWAYS succeeds!
- */
+Engineered by Shivam Coder (https://github.com/shivamdwivedi2442)
 const { withGradleProperties, withProjectBuildGradle } = require("expo/config-plugins");
 
 module.exports = function withKotlinFix(config) {
